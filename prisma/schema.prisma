@@ -11,3 +11,9 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model.student{
+  name String 
+  email String 
+  
+}
