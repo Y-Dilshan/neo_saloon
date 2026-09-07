@@ -13,7 +13,7 @@ datasource db {
 }
 
 model.student{
+  email String @id
   name String 
-  email String 
-  
+  city String 
 }
