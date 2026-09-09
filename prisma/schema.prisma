@@ -12,7 +12,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model.student{
+model student{
   email String @id
   name String 
   city String 
