@@ -17,3 +17,8 @@ model student{
   name String 
   city String 
 }
+
+model Course{
+  id String @id
+  nae String
+}
