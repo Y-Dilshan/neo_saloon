@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create JWT secret
-    const secretText = "TemporarySecretKey8929"; // Replace with your own secret key
+    const secretText = process.env.JOSE_SECRET; // Replace with your own secret key
 
     const secret = new TextEncoder().encode(secretText);
     const token = await new jose.SignJWT({
