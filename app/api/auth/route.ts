@@ -1,16 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { compare } from "bcryptjs";
+import * as jose from "jose";
 
 export async function POST(request: NextRequest) {
     const body = await request.json();
 
     if (typeof body.email !== "string" || !body.email.trim()) {
-        return new NextResponse("Email is required", { status: 400 });
+        return new NextResponse("Email is required", {
+            status: 400,
+        });
     }
 
     if (typeof body.password !== "string" || !body.password) {
-        return new NextResponse("Password is required", { status: 400 });
+        return new NextResponse("Password is required", {
+            status: 400,
+        });
     }
 
     const user = await prisma.user.findFirst({
@@ -25,7 +30,7 @@ export async function POST(request: NextRequest) {
         });
     }
 
-    // Compare the password before returning a success response.
+    // Compare the password
     const isPasswordValid = await compare(
         body.password,
         user.password
@@ -37,5 +42,20 @@ export async function POST(request: NextRequest) {
         });
     }
 
-    return new NextResponse("Login successful", { status: 200 });
+    // Create JWT secret
+    const secretText = "TemporarySecretKey8929"; // Replace with your own secret key
+
+    const secret = new TextEncoder().encode(secretText);
+    const token = await new jose.SignJWT({
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        privileges: user.privileges,
+    }).setProtectedHeader({ alg: "HS256" }).sign(secret)
+
+    return NextResponse.json({
+        message: "Login successful",
+        token,
+    });
 }
