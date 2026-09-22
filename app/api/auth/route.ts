@@ -54,8 +54,18 @@ export async function POST(request: NextRequest) {
         privileges: user.privileges,
     }).setProtectedHeader({ alg: "HS256" }).sign(secret)
 
-    return NextResponse.json({
+    const response = NextResponse.json({
         message: "Login successful",
-        token,
+        role: user.role,
+    })
+
+    response.cookies.set({
+        name: "jwt",
+        value: token,
+        httpOnly: true,
     });
+
+    return response;
 }
+
+//1.31
