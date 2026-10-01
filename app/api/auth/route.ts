@@ -63,6 +63,8 @@ export async function POST(request: NextRequest) {
         name: "jwt",
         value: token,
         httpOnly: true,
+        secure : false,
+        sameSite: "strict",
     });
 
     return response;
