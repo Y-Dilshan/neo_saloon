@@ -30,6 +30,12 @@ export async function POST(request: NextRequest) {
         });
     }
 
+    if(user.status != "ACTIVE"){
+        return new NextResponse("User account is not active", {
+            status: 403,
+        });
+    }
+
     // Compare the password
     const isPasswordValid = await compare(
         body.password,
@@ -46,6 +52,7 @@ export async function POST(request: NextRequest) {
     const secretText = process.env.JOSE_SECRET; // Replace with your own secret key
 
     const secret = new TextEncoder().encode(secretText);
+
     const token = await new jose.SignJWT({
         email: user.email,
         firstName: user.firstName,
