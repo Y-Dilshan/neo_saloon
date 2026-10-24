@@ -1,3 +1,5 @@
 import { NextRequest } from "next/server";
 
-async function GetUser(request : NextRequest){}
+export async function getUser(request: NextRequest) {
+  // Implementation for fetching user from request
+}
