@@ -32,7 +32,11 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch users without passwords
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      omit: {
+        password: true,
+      },
+    });
 
     return NextResponse.json(
       {
