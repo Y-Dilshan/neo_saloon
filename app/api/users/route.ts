@@ -33,9 +33,18 @@ export async function GET(request: NextRequest) {
 
     // Fetch users without passwords
     const users = await prisma.user.findMany({
-      omit: {
-        password: true,
-      },
+      select : {
+        id : true,
+        email : true,
+        phone : true,
+        firstName : true,
+        lastName : true,
+        role : true,
+        status : true,
+        createdAt : true,
+        lastLogin : true,
+        privileges : true,
+      }
     });
 
     return NextResponse.json(
