@@ -32,3 +32,16 @@ export async function getUser(request: NextRequest): Promise<AuthenticatedUser |
     return null;
   }
 }
+
+export async function isPrivileged(request: NextRequest, privilege: string): Promise<boolean> {
+  const user = await getUser(request);
+  if(user == null){
+    return false;
+  }
+
+  if(user.privileges.includes(privilege)){
+    return true;
+  }
+
+  return false;
+}
