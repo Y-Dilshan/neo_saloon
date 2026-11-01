@@ -109,5 +109,21 @@ export async function POST(request : NextRequest){
 }
 
 export async function PUT(request : NextRequest){
+
   const id = request.nextUrl.searchParams.get("id")
+
+  const requestedUser = await getUser(request)
+
+  if(requestedUser == null){
+    return NextResponse.json({
+      message : "Unauthorized, Please login first"
+    },
+  {
+    status : 401
+  })
+  }
+
+  if(requestedUser.id !== id){
+    // Check if the user has the "users:update" privilege
+  }else{}
 }
