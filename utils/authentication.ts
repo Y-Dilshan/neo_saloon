@@ -43,6 +43,7 @@ export async function getUser( request: NextRequest ): Promise<RequestUserType |
 
     // Return authenticated user
     return {
+      id: payload.sub as string,
       email: payload.email,
       firstName: payload.firstName,
       lastName: payload.lastName,

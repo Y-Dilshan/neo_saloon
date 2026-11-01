@@ -109,5 +109,5 @@ export async function POST(request : NextRequest){
 }
 
 export async function PUT(request : NextRequest){
-  
+  const id = request.nextUrl.searchParams.get("id")
 }
