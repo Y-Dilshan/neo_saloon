@@ -107,3 +107,7 @@ export async function POST(request : NextRequest){
    status : 201
   })
 }
+
+export async function PUT(request : NextRequest){
+  
+}
