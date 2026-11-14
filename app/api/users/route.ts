@@ -10,6 +10,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
+  const pageNumber = request.nextUrl.searchParams.get("pageNumber");
+  const pageSize = request.nextUrl.searchParams.get("pageSize");
+
   const users = await prisma.user.findMany({
     select : {
       id :true,
