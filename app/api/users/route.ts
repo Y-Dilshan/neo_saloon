@@ -12,20 +12,37 @@ export async function GET(request: NextRequest) {
 
   const pageNumber = request.nextUrl.searchParams.get("pageNumber");
   const pageSize = request.nextUrl.searchParams.get("pageSize");
+  const pageNumberInt = pageNumber ? parseInt(pageNumber) : 1;
+  const pageSizeInt = pageSize ? parseInt(pageSize) : 10;
+  const offset = (pageNumberInt - 1) * pageSizeInt;
+
+  const UsersCount = await prisma.user.count();
+
+  const totalPages = Math.ceil(UsersCount / pageSizeInt);
+
+  if (pageNumberInt > totalPages) {
+    return NextResponse.json({
+      message: "Page number exceeds total pages",
+      totalPages: totalPages,
+      users: []
+    });
+  }
 
   const users = await prisma.user.findMany({
-    select : {
-      id :true,
-      email :true,
-      phone :true,
-      firstName :true,
-      lastName :true,
-      password :false,
-      role :true,
-      status :true,
-      createdAt :true,
-      lastLogin :true,
-      privileges :true,
+    skip: (pageNumberInt - 1) * pageSizeInt ,
+    take: pageSizeInt,
+    select: {
+      id: true,
+      email: true,
+      phone: true,
+      firstName: true,
+      lastName: true,
+      password: false,
+      role: true,
+      status: true,
+      createdAt: true,
+      lastLogin: true,
+      privileges: true,
     }
   })
 
