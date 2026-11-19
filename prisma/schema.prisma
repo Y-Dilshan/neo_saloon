@@ -24,4 +24,5 @@ model user{
   createdAt DateTime @default(now())
   lastLogin DateTime?
   privileges String[] @default([]) //["CREATE_PRODUCT", "UPDATE_PRODUCT", "DELETE_PRODUCT", "VIEW_PRODUCT"]
+  profileImage String? @default("https://res.cloudinary.com/dxjv0gq2k/image/upload/v1690911685/leo-saloon/profile-images/default-profile-image.png")
 }

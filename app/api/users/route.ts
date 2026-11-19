@@ -49,7 +49,12 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(
     {
       message : "Users fetched successfully",
-      users : users
+      users : users,
+      pagination : {
+        pageNumber : pageNumberInt,
+        pageSize : pageSizeInt,
+        totalPages : totalPages,
+      }
     }
   )
 }
@@ -143,7 +148,43 @@ export async function PUT(request : NextRequest){
   })
   }
 
+  const body = await request.json()
+
   if(requestedUser.id !== id){
     // Check if the user has the "users:update" privilege
+    
+    const user = await prisma.user.findUnique({
+      where : {
+        id : requestedUser.id
+      }
+    })
+
+    if(user == null){
+      return NextResponse.json({
+        message : "User not found"
+      },
+    {
+      status : 404
+    })
+    }
+
+    await prisma.user.update({
+      where : {
+        id : requestedUser.id
+      },
+      data : {
+        email : body.email || user.email,
+        firstName : body.firstName || user.firstName,
+        lastName : body.lastName || user.lastName,
+        phone : body.phone || user.phone
+      }
+    })
+
+    return NextResponse.json({
+      message : "User updated successfully"
+    },
+  {
+    status : 200
+  })
   }else{}
 }
