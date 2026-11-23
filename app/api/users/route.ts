@@ -156,7 +156,7 @@ export async function PUT(request : NextRequest){
     const user = await prisma.user.findUnique({
       where : {
         id : requestedUser.id
-      }
+      } 
     })
 
     if(user == null){
@@ -186,5 +186,30 @@ export async function PUT(request : NextRequest){
   {
     status : 200
   })
-  }else{}
+  }else{
+    const havePrivilege = await isPrivileged(request, "users:edit");
+
+    if(havePrivilege === false){
+      return NextResponse.json({
+        message : "Unauthorized, You don't have the privilege to update other users"
+      },
+    {
+      status : 403
+    })
+    }
+
+    const user = await prisma.user.findUnique({
+      where : {
+        id : id as string
+      } 
+    })
+    if(user == null){
+      return NextResponse.json({
+        message : "User not found"
+      },
+    {
+      status : 404
+    })
+    }
+  }
 }
